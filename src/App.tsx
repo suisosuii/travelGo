@@ -7,6 +7,7 @@ import { AuthProvider } from "./auth/authProvider";
 //pages
 import SignIn from "./pages/sign";
 import Profile from "./components/profile/profile";
+import Reg from "./components/Registration/Registration";
 
 import Header from "./components/header";
 import Footer from "./components/footer";
@@ -22,6 +23,7 @@ function App() {
             <Route path="/" element={<Main />} />
             <Route path="/SignIn" element={<SignIn />} />
             <Route path="/Profile" element={<Profile />} />
+            <Route path="/Reg" element={<Reg />} />
           </Routes>
           <Footer />
         </BrowserRouter>

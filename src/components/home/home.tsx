@@ -5,12 +5,11 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "../../auth/authProvider";
 import { db } from "../../firebase";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
-import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 //img
 import noImg from "../../img/home/no_image_square.jpg";
 
 function Home() {
-  const location = useLocation();
   const [username, setUserName] = useState<string>("");
   const { user } = useAuthContext();
   useEffect(() => {
@@ -51,22 +50,24 @@ function Home() {
             border: "solid 1px #000000",
           }}
         ></img>
-        <div
-          className="descrioption"
-          style={{
-            width: isWide ? "30vw" : "43vw",
-            height: isWide ? "17vw" : "30vw",
-            marginLeft: "0",
-            marginTop: "5vh",
-            marginBottom: "5vh",
-            border: "solid 1px #000000",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <span style={{ fontSize: "2rem" }}>新規作成</span>
-        </div>
+        <Link to="/Reg">
+          <div
+            className="descrioption"
+            style={{
+              width: isWide ? "30vw" : "43vw",
+              height: isWide ? "17vw" : "30vw",
+              marginLeft: "0",
+              marginTop: "5vh",
+              marginBottom: "5vh",
+              border: "solid 1px #000000",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <span style={{ fontSize: "2rem" }}>新規作成</span>
+          </div>
+        </Link>
       </div>
     </div>
   );
