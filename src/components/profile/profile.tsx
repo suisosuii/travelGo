@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { useAuthContext } from "../../auth/authProvider";
 import { db } from "../../firebase";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+
+import ImgUp from "./ImgUp";
+
 type User = {
   name: string;
   uid: string;
@@ -18,7 +21,7 @@ function Profile() {
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(userDocRef);
-
+        <ImgUp />;
         if (docSnap.exists()) {
           console.log("Document data:", docSnap.data());
           setUserState(docSnap.data() as User);
@@ -54,17 +57,7 @@ function Profile() {
         }}
       >
         <span style={{ fontSize: "2rem" }}>Profile</span>
-        <div style={{ display: "flex", textAlign: "center" }}>
-          <img
-            src={acount}
-            alt="acountImage"
-            style={{
-              width: 100 + "px",
-              height: 100 + "px",
-              margin: "auto",
-            }}
-          ></img>
-        </div>
+        <ImgUp />
         <form style={{ display: "flex", justifyContent: "center" }}>
           <div
             style={{
