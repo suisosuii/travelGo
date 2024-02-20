@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Serch from "./serch";
+import Search from "./Search";
 
 function Registration() {
   return (
@@ -25,7 +25,7 @@ function Registration() {
           alignItems: "center",
         }}
       >
-        <Serch />
+        <Search />
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ type UserPro = {
   picURL: string;
 };
 
-function Serch() {
+function Search() {
   //ref
   const ref = useRef<HTMLInputElement>(null);
 
@@ -80,12 +80,12 @@ function Serch() {
   //エンターキー検出
   const onKeydown = (key: string) => {
     if (key == "Enter") {
-      serch();
+      search();
     }
   };
 
   //検索ボタン動作
-  const serch = () => {
+  const search = () => {
     serchId && fetchUserData();
     !showDropdown && setShowDropdown(!showDropdown);
   };
@@ -128,14 +128,14 @@ function Serch() {
         </div>
       </form>
       <div
-        className="serch"
+        className="search"
         style={{ fontSize: "1.5rem", display: "flex", flexDirection: "column" }}
       >
         同行者
       </div>
       <div style={{ marginTop: "1vh", display: "flex" }}>
         <input
-          name="serch"
+          name="search"
           type="text"
           placeholder="uidを入力"
           style={{
@@ -152,14 +152,14 @@ function Serch() {
         />
         <img
           src={SerchIcon}
-          alt="serch"
+          alt="search"
           style={{
             height: "10vw",
             width: "10vw",
             border: "solid 2px",
             boxSizing: "border-box",
           }}
-          onClick={serch}
+          onClick={search}
         ></img>
       </div>
       {showDropdown && hideTop && hideLeft && (
@@ -225,4 +225,4 @@ function Serch() {
   );
 }
 
-export default Serch;
+export default Search;

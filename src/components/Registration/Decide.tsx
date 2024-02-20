@@ -47,6 +47,8 @@ function Decide(props: { usersInfo: UserPro[]; titleText: string }) {
       };
       const profileRef = doc(db, "users", user.uid);
       const newPlansRef = doc(collection(db, "plans"));
+
+      //送信
       try {
         await setDoc(newPlansRef, { ...data, id: newPlansRef.id });
         await updateDoc(profileRef, {
