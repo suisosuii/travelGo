@@ -1,5 +1,5 @@
 import React from "react";
-import { useMedia } from "react-use";
+import { UseIsWide } from "../mediaProvider";
 import { useState, useEffect } from "react";
 
 import { useAuthContext } from "../../auth/authProvider";
@@ -34,7 +34,7 @@ function Home() {
     fetchUserData();
   }, [user]);
 
-  const isWide = useMedia("(min-width: 800px)"); // useMediaの指定の仕方を修正
+  const isWide = UseIsWide(); // useMediaの指定の仕方を修正
   return (
     <div className="createplan" style={{ height: "85vh" }}>
       <div className="message">
