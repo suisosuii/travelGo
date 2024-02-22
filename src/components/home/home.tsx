@@ -36,7 +36,7 @@ function Home() {
 
   const isWide = UseIsWide(); // useMediaの指定の仕方を修正
   return (
-    <div className="createplan" style={{ height: "85vh" }}>
+    <div className="createplan" style={{ height: "85vh", overflow: "auto" }}>
       <div className="message">
         {user ? `ようこそ${username}` : "ログインしてください"}
       </div>
