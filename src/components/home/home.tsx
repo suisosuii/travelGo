@@ -41,38 +41,40 @@ function Home() {
         {user ? `ようこそ${username}` : "ログインしてください"}
       </div>
       <div className="plan">{isWide ? "PC" : "スマホ"}</div>
-      <div className="newPlan" style={{ display: "flex" }}>
-        <img
-          src={noImg}
-          alt="NoImage"
-          style={{
-            width: isWide ? "20vw" : "32vw",
-            height: isWide ? "17vw" : "30vw",
-            marginLeft: isWide ? "26vw" : "12vw",
-            marginTop: "5vh",
-            marginBottom: "5vh",
-            border: "solid 1px #000000",
-          }}
-        ></img>
-        {user && <Plans planList={myPlans} />}
-        <Link to="/Reg">
-          <div
-            className="descrioption"
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {user && <Plans planList={myPlans} media={isWide} />}
+        <div className="newPlan" style={{ display: "flex" }}>
+          <img
+            src={noImg}
+            alt="NoImage"
             style={{
-              width: isWide ? "30vw" : "43vw",
+              width: isWide ? "20vw" : "32vw",
               height: isWide ? "17vw" : "30vw",
-              marginLeft: "0",
+              marginLeft: isWide ? "26vw" : "12vw",
               marginTop: "5vh",
               marginBottom: "5vh",
               border: "solid 1px #000000",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
             }}
-          >
-            <span style={{ fontSize: "2rem" }}>新規作成</span>
-          </div>
-        </Link>
+          ></img>
+          <Link to="/Reg">
+            <div
+              className="descrioption"
+              style={{
+                width: isWide ? "30vw" : "43vw",
+                height: isWide ? "17vw" : "30vw",
+                marginLeft: "0",
+                marginTop: "5vh",
+                marginBottom: "5vh",
+                border: "solid 1px #000000",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <span style={{ fontSize: "2rem" }}>新規作成</span>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );
