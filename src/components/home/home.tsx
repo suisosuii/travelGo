@@ -6,11 +6,14 @@ import { useAuthContext } from "../../auth/authProvider";
 import { db } from "../../firebase";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
+
+import Plans from "./Plans";
 //img
 import noImg from "../../img/home/no_image_square.jpg";
 
 function Home() {
   const [username, setUserName] = useState<string>("");
+  const [myPlans, setMyPlans] = useState([]);
   const { user } = useAuthContext();
   useEffect(() => {
     const fetchUserData = async () => {
@@ -21,6 +24,7 @@ function Home() {
         if (docSnap.exists()) {
           console.log("Document data:", docSnap.data());
           setUserName(docSnap.data().name);
+          setMyPlans(docSnap.data().plans);
         } else {
           // docSnap.data() will be undefined in this case
           console.log("No such document!");
@@ -50,6 +54,7 @@ function Home() {
             border: "solid 1px #000000",
           }}
         ></img>
+        {user && <Plans planList={myPlans} />}
         <Link to="/Reg">
           <div
             className="descrioption"
