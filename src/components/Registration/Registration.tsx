@@ -24,7 +24,7 @@ function Registration() {
   const { user } = useAuthContext();
   const location = useLocation();
   console.log(location.state);
-  const selectPlanId = location.state;
+  const selectPlanId = location.state || { id: null };
 
   const [planData, setPlanData] = useState<PlanInfo | null>();
 

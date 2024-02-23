@@ -39,7 +39,7 @@ function Search({ planData }: SearchProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [serchUser, setSerchUser] = useState<UserPro | null>(null);
   const [usersPro, setUsersPro] = useState<UserPro[]>([]);
-  const [planFlag, setPlanFlag] = useState<boolean>(false);
+  const [planId, setPlanId] = useState<string | null>();
 
   //要素位置情報取得
   useEffect(() => {
@@ -48,7 +48,8 @@ function Search({ planData }: SearchProps) {
       const clientTop = ref?.current.getBoundingClientRect().top;
       const clientLeft = ref?.current.getBoundingClientRect().left;
       planData && setUsersPro(planData.users);
-      planData && setPlanFlag(true);
+      planData && setPlanId(planData.id);
+      planData && setText(planData.title);
       setHideTop(clientTop);
       setHideLeft(clientLeft);
     }
@@ -120,7 +121,7 @@ function Search({ planData }: SearchProps) {
           <input
             name="title"
             type="text"
-            value={planData ? planData.title : ""}
+            value={text}
             placeholder="タイトルを入力"
             style={{
               marginTop: "3vh",
@@ -233,7 +234,11 @@ function Search({ planData }: SearchProps) {
         </div>
       )}
       <Scroll usersInfo={usersPro} childFunc={childDel} />
-      <Dicide usersInfo={usersPro} titleText={text} planFlag={planFlag} />
+      <Dicide
+        usersInfo={usersPro}
+        titleText={text}
+        planId={{ pid: planId ? planId : null }}
+      />
     </div>
   );
 }
