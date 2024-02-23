@@ -39,6 +39,7 @@ function Search({ planData }: SearchProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [serchUser, setSerchUser] = useState<UserPro | null>(null);
   const [usersPro, setUsersPro] = useState<UserPro[]>([]);
+  const [planFlag, setPlanFlag] = useState<boolean>(false);
 
   //要素位置情報取得
   useEffect(() => {
@@ -47,6 +48,7 @@ function Search({ planData }: SearchProps) {
       const clientTop = ref?.current.getBoundingClientRect().top;
       const clientLeft = ref?.current.getBoundingClientRect().left;
       planData && setUsersPro(planData.users);
+      planData && setPlanFlag(true);
       setHideTop(clientTop);
       setHideLeft(clientLeft);
     }
@@ -231,7 +233,7 @@ function Search({ planData }: SearchProps) {
         </div>
       )}
       <Scroll usersInfo={usersPro} childFunc={childDel} />
-      <Dicide usersInfo={usersPro} titleText={text} />
+      <Dicide usersInfo={usersPro} titleText={text} planFlag={planFlag} />
     </div>
   );
 }
