@@ -2,14 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { UseIsWide } from "../mediaProvider";
 
 import { db } from "../../firebase";
-
+import { Link } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
 //img
 import noImg from "../../img/home/no_image_square.jpg";
 
-function Plans(props: { planList: string[]; media: boolean }) {
+type PlansArray = {
+  title: string;
+  pid: string;
+};
+
+function Plans(props: { planList: string[] }) {
   const { planList } = props;
-  const [myPlan, setMyPlans] = useState<string[]>([]);
+  const [myPlan, setMyPlans] = useState<PlansArray[]>([]);
   const prevPlanListRef = useRef<string[]>([]);
 
   useEffect(() => {
@@ -27,7 +32,10 @@ function Plans(props: { planList: string[]; media: boolean }) {
           querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             console.log(doc.id, " => ", doc.data());
-            setMyPlans((prevPlans) => [...prevPlans, doc.data().title]);
+            setMyPlans((prevPlans) => [
+              ...prevPlans,
+              { title: doc.data().title, pid: doc.data().id },
+            ]);
           });
         } else {
           // docSnap.data() will be undefined in this case
@@ -43,7 +51,7 @@ function Plans(props: { planList: string[]; media: boolean }) {
       className="newPlan"
       style={{ display: "flex", flexDirection: "column" }}
     >
-      {myPlan.map((title, index) => (
+      {myPlan.map(({ title, pid }, index) => (
         <div key={index} style={{ display: "flex" }}>
           <img
             src={noImg}
@@ -71,7 +79,11 @@ function Plans(props: { planList: string[]; media: boolean }) {
               justifyContent: "center",
             }}
           >
-            <span style={{ fontSize: "2rem" }}>{title}</span>
+            <Link to="/Reg" state={{ id: pid }}>
+              <span style={{ fontSize: "2rem", cursor: "pointer" }}>
+                {title}
+              </span>
+            </Link>
           </div>
         </div>
       ))}

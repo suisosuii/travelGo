@@ -16,8 +16,6 @@ import { useAuthContext } from "../../auth/authProvider";
 type UserPro = {
   name: string;
   uid: string;
-  plan: number;
-  picURL: string;
 };
 function Decide(props: { usersInfo: UserPro[]; titleText: string }) {
   //認証情報
@@ -62,7 +60,7 @@ function Decide(props: { usersInfo: UserPro[]; titleText: string }) {
             plan: increment(1),
           });
         });
-        navigate("/");
+        navigate("/Plan");
         console.log("送信成功");
       } catch (e) {
         console.error("Error adding document: ", e);

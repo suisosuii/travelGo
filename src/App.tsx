@@ -12,6 +12,7 @@ import Reg from "./components/Registration/Registration";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import Main from "./components/home/home";
+import Plan from "./components/PlanPage/day";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/SignIn" element={<SignIn />} />
             <Route path="/Profile" element={<Profile />} />
             <Route path="/Reg" element={<Reg />} />
+            <Route path="/Plan" element={<Plan />} />
           </Routes>
           <Footer />
         </BrowserRouter>
