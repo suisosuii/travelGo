@@ -66,7 +66,7 @@ function Decide(props: {
             plan: increment(1),
           });
         });
-        navigate("/Plan");
+        navigate("/Plan", { state: { pid: newPlansRef.id } });
         console.log("送信成功");
       } catch (e) {
         console.error("Error adding document: ", e);
