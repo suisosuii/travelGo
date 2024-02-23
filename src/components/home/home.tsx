@@ -42,7 +42,7 @@ function Home() {
       </div>
       <div className="plan">{isWide ? "PC" : "スマホ"}</div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {user && <Plans planList={myPlans} media={isWide} />}
+        {user && <Plans planList={myPlans} />}
         <div className="newPlan" style={{ display: "flex" }}>
           <img
             src={noImg}
@@ -56,7 +56,7 @@ function Home() {
               border: "solid 1px #000000",
             }}
           ></img>
-          <Link to="/Reg">
+          <Link to="/Reg" state={{ selId: null }}>
             <div
               className="descrioption"
               style={{

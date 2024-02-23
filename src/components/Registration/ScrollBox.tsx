@@ -5,8 +5,6 @@ import { useState, useEffect } from "react";
 type UserPro = {
   name: string;
   uid: string;
-  plan: number;
-  picURL: string;
 };
 
 function ScrollBox(props: {

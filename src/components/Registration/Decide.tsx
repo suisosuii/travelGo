@@ -16,10 +16,12 @@ import { useAuthContext } from "../../auth/authProvider";
 type UserPro = {
   name: string;
   uid: string;
-  plan: number;
-  picURL: string;
 };
-function Decide(props: { usersInfo: UserPro[]; titleText: string }) {
+function Decide(props: {
+  usersInfo: UserPro[];
+  titleText: string;
+  planFlag: boolean;
+}) {
   //認証情報
   const { user } = useAuthContext();
 
@@ -27,13 +29,15 @@ function Decide(props: { usersInfo: UserPro[]; titleText: string }) {
   const navigate = useNavigate();
 
   //props関連
-  const { usersInfo, titleText } = props;
+  const { usersInfo, titleText, planFlag } = props;
   const [usersPro, setUsersPro] = useState<UserPro[]>([]);
   const [text, setText] = useState<string>("");
+  const [planIs, setPlanIs] = useState<boolean>();
   useEffect(() => {
     setUsersPro(usersInfo);
     setText(titleText);
-  }, [usersInfo, titleText]);
+    setPlanIs(planFlag);
+  }, [usersInfo, titleText, planFlag]);
 
   //送信関数
   const handleSend = async () => {
@@ -62,7 +66,7 @@ function Decide(props: { usersInfo: UserPro[]; titleText: string }) {
             plan: increment(1),
           });
         });
-        navigate("/");
+        navigate("/Plan", { state: { pid: newPlansRef.id } });
         console.log("送信成功");
       } catch (e) {
         console.error("Error adding document: ", e);
@@ -79,7 +83,7 @@ function Decide(props: { usersInfo: UserPro[]; titleText: string }) {
         fontSize: "1.5rem",
       }}
     >
-      予定作成
+      {planIs ? "計画予定へ" : "予定作成"}
     </button>
   );
 }

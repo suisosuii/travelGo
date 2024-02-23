@@ -11,11 +11,20 @@ import Dicide from "./Decide";
 type UserPro = {
   name: string;
   uid: string;
-  plan: number;
-  picURL: string;
 };
 
-function Search() {
+type PlanInfo = {
+  id: string;
+  owner: string;
+  title: string;
+  users: { name: string; uid: string }[];
+};
+
+type SearchProps = {
+  planData: PlanInfo | null;
+};
+
+function Search({ planData }: SearchProps) {
   //ref
   const ref = useRef<HTMLInputElement>(null);
 
@@ -30,6 +39,7 @@ function Search() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [serchUser, setSerchUser] = useState<UserPro | null>(null);
   const [usersPro, setUsersPro] = useState<UserPro[]>([]);
+  const [planFlag, setPlanFlag] = useState<boolean>(false);
 
   //要素位置情報取得
   useEffect(() => {
@@ -37,10 +47,12 @@ function Search() {
       console.log(ref.current.clientTop);
       const clientTop = ref?.current.getBoundingClientRect().top;
       const clientLeft = ref?.current.getBoundingClientRect().left;
+      planData && setUsersPro(planData.users);
+      planData && setPlanFlag(true);
       setHideTop(clientTop);
       setHideLeft(clientLeft);
     }
-  }, [ref]);
+  }, [planData]);
 
   //DB読み込み処理
   const fetchUserData = async () => {
@@ -108,6 +120,7 @@ function Search() {
           <input
             name="title"
             type="text"
+            value={planData ? planData.title : ""}
             placeholder="タイトルを入力"
             style={{
               marginTop: "3vh",
@@ -220,7 +233,7 @@ function Search() {
         </div>
       )}
       <Scroll usersInfo={usersPro} childFunc={childDel} />
-      <Dicide usersInfo={usersPro} titleText={text} />
+      <Dicide usersInfo={usersPro} titleText={text} planFlag={planFlag} />
     </div>
   );
 }
