@@ -10,6 +10,7 @@ import {
   arrayUnion,
   increment,
   getDoc,
+  arrayRemove,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useAuthContext } from "../../auth/authProvider";
@@ -22,10 +23,12 @@ type UserPro = {
 type PlanIdProps = {
   pid: string | null;
 };
+
 function Decide(props: {
   usersInfo: UserPro[];
   titleText: string;
   planId: PlanIdProps;
+  oldUsers: UserPro[] | null;
 }) {
   //認証情報
   const { user } = useAuthContext();
@@ -34,15 +37,17 @@ function Decide(props: {
   const navigate = useNavigate();
 
   //props関連
-  const { usersInfo, titleText, planId } = props;
+  const { usersInfo, titleText, planId, oldUsers } = props;
   const [usersPro, setUsersPro] = useState<UserPro[]>([]);
   const [text, setText] = useState<string>("");
   const [alPlanId, setAlPlanId] = useState<string>();
+  const [oldUsersPro, setOldUsersPro] = useState<UserPro[]>([]);
   useEffect(() => {
     setUsersPro(usersInfo);
     setText(titleText);
     planId.pid && setAlPlanId(planId.pid);
-  }, [usersInfo, titleText, planId]);
+    oldUsers && setOldUsersPro(oldUsers);
+  }, [usersInfo, titleText, planId, oldUsers]);
 
   //送信関数
   const handleSend = async () => {
@@ -74,6 +79,18 @@ function Decide(props: {
         } else {
           const alPlansRef = doc(db, "plans", alPlanId);
           await updateDoc(alPlansRef, { ...data });
+          if (oldUsers) {
+            oldUsersPro.map(async (user) => {
+              if (!usersPro.some((us) => us.uid === user.uid)) {
+                // usersProのすべての要素のuidにuser.uidが含まれていない場合の処理
+                const nonProfileRef = doc(db, "users", user.uid);
+                await updateDoc(nonProfileRef, {
+                  plan: increment(-1),
+                  plans: arrayRemove(alPlanId),
+                });
+              }
+            });
+          }
           usersPro.map(async (us) => {
             const friendProfileRef = doc(db, "users", us.uid);
             // まず、friendProfileRef からドキュメントを取得する

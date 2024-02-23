@@ -238,6 +238,7 @@ function Search({ planData }: SearchProps) {
         usersInfo={usersPro}
         titleText={text}
         planId={{ pid: planId ? planId : null }}
+        oldUsers={planData ? planData.users : null}
       />
     </div>
   );
