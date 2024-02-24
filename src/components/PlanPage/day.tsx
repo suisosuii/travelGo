@@ -10,7 +10,8 @@ type dayPlan = {
   expectedData: {
     picURL: string;
     loc: string;
-    time: string;
+    start: string;
+    end: string;
     budget: number;
     descrip: string;
     album: number;
@@ -42,7 +43,23 @@ function Day() {
   // fetchUserData();
   useEffect(() => {
     if (locState.day === 0) {
-      setDayPlans([{ expectedNum: 1, expectedData: [], traffic: [] }]);
+      setDayPlans([
+        {
+          expectedNum: 1,
+          expectedData: [
+            {
+              picURL: "",
+              loc: "",
+              start: "",
+              end: "",
+              budget: 0,
+              descrip: "",
+              album: 0,
+            },
+          ],
+          traffic: [],
+        },
+      ]);
       setDays(1);
     } else {
     }
@@ -88,7 +105,7 @@ function Day() {
         flexDirection: "column",
         alignItems: "center",
         overflow: "auto",
-        width: "100%",
+        width: "100vw",
       }}
     >
       <div style={titleStyle}>{locState.title}</div>

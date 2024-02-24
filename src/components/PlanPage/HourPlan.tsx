@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useScratch } from "react-use";
 
+import Hide from "./Hide";
+
 type dayPlan = {
   expectedNum: number;
   expectedData: {
     picURL: string;
     loc: string;
-    time: string;
+    start: string;
+    end: string;
     budget: number;
     descrip: string;
     album: number;
@@ -17,7 +20,7 @@ type dayPlan = {
 
 function HourPlan(props: { planData: dayPlan[]; day: number }) {
   const { planData, day } = props;
-  const [daysPlan, setDaysPlan] = useState();
+  const [daysPlan, setDaysPlan] = useState<dayPlan[]>([]);
 
   const [showPlan, setShowPlan] = useState<boolean[]>([]);
 
@@ -26,8 +29,12 @@ function HourPlan(props: { planData: dayPlan[]; day: number }) {
     for (let i: number = 0; i < day; i++) {
       setShowPlan((prevShowPlan) => [...prevShowPlan, false]);
     }
-    console.log(showPlan + " day = " + day);
   }, [day]);
+
+  // planDataが変わった時に実行される
+  useEffect(() => {
+    setDaysPlan(planData);
+  }, [planData]);
 
   const handleShowPlan = (i: number) => {
     setShowPlan((prevShowPlan) =>
@@ -40,7 +47,7 @@ function HourPlan(props: { planData: dayPlan[]; day: number }) {
   const dayStyle = {
     display: "flex",
     height: "5vh",
-    width: "70vw",
+    width: "80vw",
     justifyContent: "space-between",
     cursor: "pointer",
     border: "3px solid black",
@@ -54,11 +61,14 @@ function HourPlan(props: { planData: dayPlan[]; day: number }) {
   return (
     <div>
       {planData.map((plan, index) => (
-        <div onClick={() => handleShowPlan(index)}>
-          <div style={dayStyle}>
-            {`DAY${index + 1}`}
-            <span>∨</span>
+        <div style={{ width: "100%" }}>
+          <div onClick={() => handleShowPlan(index)}>
+            <div style={dayStyle}>
+              {`DAY${index + 1}`}
+              <span>{showPlan[index] ? "∧" : "∨"}</span>
+            </div>
           </div>
+          {showPlan[index] && <Hide plan={plan} />}
         </div>
       ))}
     </div>
