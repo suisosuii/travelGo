@@ -18,6 +18,7 @@ type PlanInfo = {
   owner: string;
   title: string;
   users: { name: string; uid: string }[];
+  day: number;
 };
 
 type SearchProps = {
@@ -239,6 +240,7 @@ function Search({ planData }: SearchProps) {
         titleText={text}
         planId={{ pid: planId ? planId : null }}
         oldUsers={planData ? planData.users : null}
+        days={planData ? planData.day : 0}
       />
     </div>
   );
