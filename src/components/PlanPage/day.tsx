@@ -8,6 +8,7 @@ import plus from "../../img/plan/plus.png";
 type dayPlan = {
   expectedNum: number;
   expectedData: {
+    picURL: string;
     loc: string;
     time: string;
     budget: number;
@@ -46,6 +47,15 @@ function Day() {
     } else {
     }
   }, [locState.day]);
+
+  const handlePlus = () => {
+    setDays(days + 1);
+    setDayPlans((prevDayPlans) => [
+      ...prevDayPlans,
+      { expectedNum: 1, expectedData: [], traffic: [] },
+    ]);
+    console.log(dayPlans);
+  };
 
   //dayボックスのスタイル
   const dayStyle = {
@@ -92,6 +102,7 @@ function Day() {
           marginTop: "5vh",
           borderRadius: "2vh",
         }}
+        onClick={() => handlePlus()}
       >
         <img
           src={plus}

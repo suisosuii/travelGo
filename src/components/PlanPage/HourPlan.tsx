@@ -4,6 +4,7 @@ import { useScratch } from "react-use";
 type dayPlan = {
   expectedNum: number;
   expectedData: {
+    picURL: string;
     loc: string;
     time: string;
     budget: number;
@@ -20,10 +21,19 @@ function HourPlan(props: { planData: dayPlan[]; day: number }) {
 
   const [showPlan, setShowPlan] = useState<boolean[]>([]);
 
+  useEffect(() => {
+    setShowPlan([]);
+    for (let i: number = 0; i < day; i++) {
+      setShowPlan((prevShowPlan) => [...prevShowPlan, false]);
+    }
+    console.log(showPlan + " day = " + day);
+  }, [day]);
+
   const handleShowPlan = (i: number) => {
     setShowPlan((prevShowPlan) =>
       prevShowPlan.map((item, index) => (index === i ? !item : item))
     );
+    console.log(showPlan);
   };
 
   //dayボックスのスタイル
