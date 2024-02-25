@@ -18,6 +18,7 @@ type PlanInfo = {
   owner: string;
   title: string;
   users: { name: string; uid: string }[];
+  day: number;
 };
 
 function Registration() {
@@ -43,6 +44,7 @@ function Registration() {
               owner: data.owner,
               title: data.title,
               users: data.users,
+              day: data.day,
             });
           } else {
             // docSnap.data() will be undefined in this case

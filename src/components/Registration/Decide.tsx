@@ -29,6 +29,7 @@ function Decide(props: {
   titleText: string;
   planId: PlanIdProps;
   oldUsers: UserPro[] | null;
+  days: number;
 }) {
   //認証情報
   const { user } = useAuthContext();
@@ -37,27 +38,30 @@ function Decide(props: {
   const navigate = useNavigate();
 
   //props関連
-  const { usersInfo, titleText, planId, oldUsers } = props;
+  const { usersInfo, titleText, planId, oldUsers, days } = props;
   const [usersPro, setUsersPro] = useState<UserPro[]>([]);
   const [text, setText] = useState<string>("");
   const [alPlanId, setAlPlanId] = useState<string>();
   const [oldUsersPro, setOldUsersPro] = useState<UserPro[]>([]);
+  const [dayNum, setDayNum] = useState<number>();
   useEffect(() => {
     setUsersPro(usersInfo);
     setText(titleText);
     planId.pid && setAlPlanId(planId.pid);
     oldUsers && setOldUsersPro(oldUsers);
-  }, [usersInfo, titleText, planId, oldUsers]);
+    setDayNum(days);
+  }, [usersInfo, titleText, planId, oldUsers, days]);
 
   //送信関数
   const handleSend = async () => {
     if (user) {
-      console.log("click");
+      console.log("day=" + dayNum);
       //送信オブジェクト
       const data = {
         title: text,
         users: usersPro.map((user) => ({ name: user.name, uid: user.uid })),
         owner: user?.uid,
+        day: dayNum,
       };
       const profileRef = doc(db, "users", user.uid);
       const newPlansRef = doc(collection(db, "plans"));
@@ -65,6 +69,7 @@ function Decide(props: {
       try {
         if (!alPlanId) {
           await setDoc(newPlansRef, { ...data, id: newPlansRef.id });
+          setAlPlanId(newPlansRef.id);
           await updateDoc(profileRef, {
             plans: arrayUnion(newPlansRef.id),
             plan: increment(1),
@@ -91,6 +96,7 @@ function Decide(props: {
               }
             });
           }
+          //各ユーザープロフィールにプラン追加
           usersPro.map(async (us) => {
             const friendProfileRef = doc(db, "users", us.uid);
             // まず、friendProfileRef からドキュメントを取得する
@@ -111,7 +117,7 @@ function Decide(props: {
           });
         }
         navigate("/Plan", {
-          state: { pid: newPlansRef.id, title: data.title },
+          state: { pid: alPlanId, title: data.title, day: dayNum },
         });
         console.log("送信成功");
       } catch (e) {
