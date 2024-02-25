@@ -13,7 +13,7 @@ type dayPlan = {
     end: string;
     budget: number;
     descrip: string;
-    album: number;
+    album: string[];
   }[];
 
   traffic: { budged: number }[];
@@ -85,7 +85,7 @@ function Hide(props: { aryNum: number }) {
                 end: "",
                 budget: 0,
                 descrip: "",
-                album: 0,
+                album: [],
               },
             ],
             traffic: [...topData.traffic, { budged: 0 }],

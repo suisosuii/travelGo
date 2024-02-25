@@ -1,24 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { DayPlanContext } from "./Day";
 
-import { useScratch } from "react-use";
-
 import Hide from "./Hide";
-
-type dayPlan = {
-  expectedNum: number;
-  expectedData: {
-    picURL: string;
-    loc: string;
-    start: string;
-    end: string;
-    budget: number;
-    descrip: string;
-    album: number;
-  }[];
-
-  traffic: { budged: number }[];
-};
 
 function HourPlan(props: { day: number }) {
   const { day } = props;

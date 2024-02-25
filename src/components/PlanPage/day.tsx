@@ -1,6 +1,7 @@
 import React, { useEffect, useState, createContext } from "react";
 import Hour from "./HourPlan";
 
+import Updata from "./Updata";
 import { useLocation } from "react-router-dom";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -14,7 +15,7 @@ type dayPlan = {
     end: string;
     budget: number;
     descrip: string;
-    album: number;
+    album: string[];
   }[];
 
   traffic: { budged: number }[];
@@ -46,7 +47,7 @@ function Day() {
               end: "",
               budget: 0,
               descrip: "",
-              album: 0,
+              album: [],
             },
           ],
           traffic: [],
@@ -54,6 +55,21 @@ function Day() {
       ]);
       setDays(1);
     } else {
+      const fetchPlanData = async () => {
+        const planDocRef = doc(db, "plans", locState.pid);
+        const docSnap = await getDoc(planDocRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          const data = docSnap.data();
+          setDayPlans(data.planInfo);
+          setDays(data.day);
+        } else {
+          // docSnap.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      };
+      fetchPlanData();
     }
   }, [locState.day]);
 
@@ -121,6 +137,7 @@ function Day() {
             style={{ width: "5vh", height: "5vh" }}
           ></img>
         </div>
+        <Updata pid={locState.pid} />
       </div>
     </DayPlanContext.Provider>
   );
