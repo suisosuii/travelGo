@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { DayPlanContext } from "./Day";
+
 import { useScratch } from "react-use";
 
 import Hide from "./Hide";
@@ -18,9 +20,15 @@ type dayPlan = {
   traffic: { budged: number }[];
 };
 
-function HourPlan(props: { planData: dayPlan[]; day: number }) {
-  const { planData, day } = props;
-  const [daysPlan, setDaysPlan] = useState<dayPlan[]>([]);
+function HourPlan(props: { day: number }) {
+  const { day } = props;
+
+  const context = useContext(DayPlanContext);
+  if (!context) {
+    // Contextがundefinedの場合の処理をここに書く
+    throw new Error("DayPlanContext is not provided");
+  }
+  const [dayPlans, setDayPlans] = context;
 
   const [showPlan, setShowPlan] = useState<boolean[]>([]);
 
@@ -30,11 +38,6 @@ function HourPlan(props: { planData: dayPlan[]; day: number }) {
       setShowPlan((prevShowPlan) => [...prevShowPlan, false]);
     }
   }, [day]);
-
-  // planDataが変わった時に実行される
-  useEffect(() => {
-    setDaysPlan(planData);
-  }, [planData]);
 
   const handleShowPlan = (i: number) => {
     setShowPlan((prevShowPlan) =>
@@ -60,7 +63,7 @@ function HourPlan(props: { planData: dayPlan[]; day: number }) {
   };
   return (
     <div>
-      {planData.map((plan, index) => (
+      {dayPlans.map((plan, index) => (
         <div style={{ width: "100%" }}>
           <div onClick={() => handleShowPlan(index)}>
             <div style={dayStyle}>
@@ -68,7 +71,7 @@ function HourPlan(props: { planData: dayPlan[]; day: number }) {
               <span>{showPlan[index] ? "∧" : "∨"}</span>
             </div>
           </div>
-          {showPlan[index] && <Hide plan={plan} />}
+          {showPlan[index] && <Hide aryNum={index} />}
         </div>
       ))}
     </div>

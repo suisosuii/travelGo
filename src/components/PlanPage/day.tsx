@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import Hour from "./HourPlan";
 
 import { useLocation } from "react-router-dom";
@@ -20,27 +20,19 @@ type dayPlan = {
   traffic: { budged: number }[];
 };
 
+// 新しいContextを作成します
+export const DayPlanContext = createContext<
+  [dayPlan[], React.Dispatch<React.SetStateAction<dayPlan[]>>] | undefined
+>(undefined);
+
 function Day() {
   const location = useLocation();
-  console.log(location.state);
   const locState = location.state;
 
   //dayの配列State
   const [dayPlans, setDayPlans] = useState<dayPlan[]>([]);
   const [days, setDays] = useState<number>(0);
-  // const plansDocRef = doc(db, "plans", locState.pid);
-  // const fetchUserData = async () => {
-  //   const docSnap = await getDoc(plansDocRef);
 
-  //   if (docSnap.exists()) {
-  //     console.log("Document data:", docSnap.data());
-  //     setDayPlans({})
-  //   } else {
-  //     // docSnap.data() will be undefined in this case
-  //     console.log("No such document!");
-  //   }
-  // };
-  // fetchUserData();
   useEffect(() => {
     if (locState.day === 0) {
       setDayPlans([
@@ -98,36 +90,39 @@ function Day() {
   };
 
   return (
-    <div
-      style={{
-        height: "84vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        overflow: "auto",
-        width: "100vw",
-      }}
-    >
-      <div style={titleStyle}>{locState.title}</div>
-      <Hour planData={dayPlans} day={days} />
+    // Context Providerを使用してdayPlans stateを提供します
+    <DayPlanContext.Provider value={[dayPlans, setDayPlans]}>
       <div
-        className="plusButton"
         style={{
-          width: "50vw",
-          height: "5vh",
-          border: "solid 2px black",
-          marginTop: "5vh",
-          borderRadius: "2vh",
+          height: "84vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          overflow: "auto",
+          width: "100vw",
         }}
-        onClick={() => handlePlus()}
       >
-        <img
-          src={plus}
-          alt="plus"
-          style={{ width: "5vh", height: "5vh" }}
-        ></img>
+        <div style={titleStyle}>{locState.title}</div>
+        <Hour day={days} />
+        <div
+          className="plusButton"
+          style={{
+            width: "50vw",
+            height: "5vh",
+            border: "solid 2px black",
+            marginTop: "5vh",
+            borderRadius: "2vh",
+          }}
+          onClick={() => handlePlus()}
+        >
+          <img
+            src={plus}
+            alt="plus"
+            style={{ width: "5vh", height: "5vh" }}
+          ></img>
+        </div>
       </div>
-    </div>
+    </DayPlanContext.Provider>
   );
 }
 

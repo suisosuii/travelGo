@@ -12,7 +12,7 @@ import Reg from "./components/Registration/Registration";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import Main from "./components/home/home";
-import Plan from "./components/PlanPage/day";
+import Plan from "./components/PlanPage/Day";
 
 function App() {
   return (
