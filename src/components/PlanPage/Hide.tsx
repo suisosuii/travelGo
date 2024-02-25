@@ -21,12 +21,13 @@ function Hide(props: { plan: dayPlan }) {
 
   const [planSta, setPlanSta] = useState<dayPlan>();
 
-  const [start, setStart] = useState<string>();
-  const [end, setEnd] = useState<string>();
-  const [loc, setLoc] = useState<string>();
-  const [budged, setBudged] = useState<number>();
-  const [descrip, setDeicrip] = useState<string>();
-  const [album, setAlubum] = useState<number>();
+  const [start, setStart] = useState<string[]>([]);
+  const [end, setEnd] = useState<string[]>([]);
+  const [loc, setLoc] = useState<string[]>([]);
+  const [budged, setBudged] = useState<number[]>([]);
+  const [descrip, setDeicrip] = useState<string[]>([]);
+  const [album, setAlubum] = useState<number[]>([]);
+  const [traffic, setTraffic] = useState<number[]>([]);
   const [showDropdown, setShowDropdown] = useState<boolean[]>([]);
 
   const [exNum, setExNum] = useState<number>(0);
@@ -43,6 +44,32 @@ function Hide(props: { plan: dayPlan }) {
     }
   }, [exNum]);
 
+  useEffect(() => {
+    setPlanSta((prevPlanSta) => {
+      if (!prevPlanSta) {
+        // Handle the case where prevPlanSta is undefined
+        return;
+      }
+      return {
+        ...prevPlanSta,
+        expectedNum: exNum,
+        expectedData: prevPlanSta.expectedData.map((data, index) => ({
+          ...data,
+          start: start[index] || data.start,
+          end: end[index] || data.end,
+          loc: loc[index] || data.loc,
+          budget: budged[index] || data.budget,
+          descrip: descrip[index] || data.descrip,
+          album: album[index] || data.album,
+        })),
+        traffic: prevPlanSta.traffic.map((data, index) => ({
+          budged: traffic[index] || data.budged,
+        })),
+      };
+    });
+    console.log(planSta);
+  }, [start, end, loc, budged, descrip, album, traffic]);
+
   const timeStyle: React.CSSProperties = {
     display: "flex",
     width: "13vw",
@@ -57,6 +84,14 @@ function Hide(props: { plan: dayPlan }) {
     width: "40vw",
     height: "5vh",
     fontSize: "1rem",
+    boxSizing: "border-box",
+    border: "2px solid",
+  };
+  const traStyle: React.CSSProperties = {
+    display: "flex",
+    width: "18vw",
+    height: "7vh",
+    fontSize: "1.3rem",
     boxSizing: "border-box",
     border: "2px solid",
   };
@@ -89,7 +124,7 @@ function Hide(props: { plan: dayPlan }) {
             album: 0,
           },
         ],
-        traffic: [{ budged: 0 }],
+        traffic: [...prevPlanSta.traffic, { budged: 0 }],
       };
     });
     console.log(planSta);
@@ -117,7 +152,28 @@ function Hide(props: { plan: dayPlan }) {
                     borderRight: "dashed 5px",
                   }}
                 ></div>
-                <input placeholder="交通費" style={locStyle} />
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="500"
+                  value={traffic[num - 1]}
+                  style={traStyle}
+                  onKeyPress={(e) => {
+                    // 入力値が数値でない場合、その入力を無視
+                    if (!/[0-9]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e) => {
+                    // 入力値が数値であることを確認
+                    if (!isNaN(Number(e.target.value))) {
+                      const newTraffic = [...traffic]; // start配列をコピー
+                      newTraffic[num - 1] = Number(e.target.value); // num番目の値を更新
+                      setTraffic(newTraffic); // 更新した配列を設定
+                    }
+                  }}
+                />
+                円
               </div>
             )}
             <div
@@ -137,28 +193,40 @@ function Hide(props: { plan: dayPlan }) {
                 <input
                   name="start"
                   type="text"
-                  value={start}
+                  value={start[num]}
                   placeholder="開始"
                   style={timeStyle}
-                  onChange={(e) => setStart(e.target.value)}
+                  onChange={(e) => {
+                    const newStart = [...start]; // start配列をコピー
+                    newStart[num] = e.target.value; // num番目の値を更新
+                    setStart(newStart); // 更新した配列を設定
+                  }}
                 />
                 ～
                 <input
                   name="end"
                   type="text"
-                  value={end}
+                  value={end[num]}
                   placeholder="終了"
                   style={timeStyle}
-                  onChange={(e) => setEnd(e.target.value)}
+                  onChange={(e) => {
+                    const newEnd = [...end]; // start配列をコピー
+                    newEnd[num] = e.target.value; // num番目の値を更新
+                    setEnd(newEnd); // 更新した配列を設定
+                  }}
                 />
               </div>
               <input
                 name="loc"
                 type="text"
-                value={loc}
+                value={loc[num]}
                 placeholder="場所"
                 style={locStyle}
-                onChange={(e) => setLoc(e.target.value)}
+                onChange={(e) => {
+                  const newLoc = [...loc]; // start配列をコピー
+                  newLoc[num] = e.target.value; // num番目の値を更新
+                  setLoc(newLoc); // 更新した配列を設定
+                }}
               />
               <div onClick={() => handleShowDropdown(num)}>
                 {showDropdown[num] ? "∧" : "∨"}
