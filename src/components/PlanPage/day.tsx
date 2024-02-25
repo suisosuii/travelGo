@@ -98,8 +98,8 @@ function Day() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          overflow: "auto",
-          width: "100vw",
+          overflowY: "auto",
+          overflowX: "hidden",
         }}
       >
         <div style={titleStyle}>{locState.title}</div>

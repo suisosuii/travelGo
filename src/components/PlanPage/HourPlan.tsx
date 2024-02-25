@@ -47,10 +47,10 @@ function HourPlan(props: { day: number }) {
   };
 
   //dayボックスのスタイル
-  const dayStyle = {
+  const dayStyle: React.CSSProperties = {
     display: "flex",
     height: "5vh",
-    width: "80vw",
+    width: "90vw",
     justifyContent: "space-between",
     cursor: "pointer",
     border: "3px solid black",
@@ -60,12 +60,34 @@ function HourPlan(props: { day: number }) {
     fontSize: "1.5rem",
     alignItems: "center",
     lineHeight: "5vh",
+    boxSizing: "border-box",
   };
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center", // 水平方向の配置を制御
+        flexDirection: "column",
+      }}
+    >
       {dayPlans.map((plan, index) => (
-        <div style={{ width: "100%" }}>
-          <div onClick={() => handleShowPlan(index)}>
+        <div
+          style={{
+            width: "80vw",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center", // 水平方向の配置を制御
+            flexDirection: "column",
+          }}
+        >
+          <div
+            onClick={() => handleShowPlan(index)}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <div style={dayStyle}>
               {`DAY${index + 1}`}
               <span>{showPlan[index] ? "∧" : "∨"}</span>

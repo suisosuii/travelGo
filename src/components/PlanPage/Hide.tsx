@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { DayPlanContext } from "./Day";
 
+import PlanDes from "./PlanDes";
 import plus from "../../img/plan/ExPlus.png";
 
 type dayPlan = {
@@ -27,51 +28,14 @@ function Hide(props: { aryNum: number }) {
   }
   const [dayPlans, setDayPlans] = context;
 
-  const [start, setStart] = useState<string[]>([]);
-  const [end, setEnd] = useState<string[]>([]);
-  const [loc, setLoc] = useState<string[]>([]);
-  const [budged, setBudged] = useState<number[]>([]);
-  const [descrip, setDeicrip] = useState<string[]>([]);
-  const [album, setAlubum] = useState<number[]>([]);
-  const [traffic, setTraffic] = useState<number[]>([]);
   const [showDropdown, setShowDropdown] = useState<boolean[]>([]);
-
-  const [exNum, setExNum] = useState<number>(0);
 
   useEffect(() => {
     setShowDropdown([]);
-    for (let i: number = 0; i < exNum; i++) {
+    for (let i: number = 0; i < dayPlans[aryNum].expectedNum; i++) {
       setShowDropdown((prevShowPlan) => [...prevShowPlan, false]);
     }
-  }, [exNum]);
-
-  useEffect(() => {
-    setDayPlans((prevPlanSta) => {
-      return prevPlanSta.map((topData, index) => {
-        if (index == aryNum) {
-          return {
-            ...topData,
-            expectedNum: exNum,
-            expectedData: topData.expectedData.map((data, index) => ({
-              ...data,
-              start: start[index] || data.start,
-              end: end[index] || data.end,
-              loc: loc[index] || data.loc,
-              budget: budged[index] || data.budget,
-              descrip: descrip[index] || data.descrip,
-              album: album[index] || data.album,
-            })),
-            traffic: topData.traffic.map((data, index) => ({
-              budged: traffic[index] || data.budged,
-            })),
-          };
-        } else {
-          return topData;
-        }
-      });
-    });
-    console.log(dayPlans);
-  }, [start, end, loc, budged, descrip, album, traffic]);
+  }, [dayPlans[aryNum].expectedNum]);
 
   const timeStyle: React.CSSProperties = {
     display: "flex",
@@ -106,13 +70,12 @@ function Hide(props: { aryNum: number }) {
   };
 
   const handlePlus = () => {
-    setExNum(exNum + 1);
     setDayPlans((prevPlanSta) => {
       return prevPlanSta.map((topData, index) => {
         if (index === aryNum) {
           return {
             ...topData,
-            expectedNum: exNum,
+            expectedNum: topData.expectedNum + 1,
             expectedData: [
               ...topData.expectedData,
               {
@@ -137,16 +100,26 @@ function Hide(props: { aryNum: number }) {
   return (
     <div
       style={{
-        width: "100%",
+        width: "90vw",
         height: "auto",
         display: "flex",
         flexDirection: "column",
+        boxSizing: "border-box",
       }}
     >
       {dayPlans[aryNum].expectedData.map((data, num) => (
         <div key={num}>
           {num !== 0 && (
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                width: "90vw",
+                borderRight: "solid 3px",
+                borderLeft: "solid 3px",
+                boxSizing: "border-box",
+              }}
+            >
               <div
                 className="dashed"
                 style={{
@@ -163,16 +136,18 @@ function Hide(props: { aryNum: number }) {
                 style={traStyle}
                 onKeyDown={(e) => {
                   // 入力値が数値でない場合、その入力を無視
-                  if (!/[0-9]/.test(e.key)) {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace") {
                     e.preventDefault();
                   }
                 }}
                 onChange={(e) => {
                   // 入力値が数値であることを確認
-                  if (!isNaN(Number(e.target.value))) {
-                    const newTraffic = [...traffic]; // start配列をコピー
-                    newTraffic[num - 1] = Number(e.target.value); // num番目の値を更新
-                    setTraffic(newTraffic); // 更新した配列を設定
+                  // ただし、入力が空である場合も許容
+                  if (e.target.value === "" || !isNaN(Number(e.target.value))) {
+                    const newDayPlans = [...dayPlans]; // dayPlans配列をコピー
+                    newDayPlans[aryNum].traffic[num - 1].budged =
+                      e.target.value === "" ? 0 : Number(e.target.value); // budgetを更新
+                    setDayPlans(newDayPlans); // 更新した配列を設定
                   }
                 }}
               />
@@ -200,9 +175,9 @@ function Hide(props: { aryNum: number }) {
                 placeholder="開始"
                 style={timeStyle}
                 onChange={(e) => {
-                  const newStart = [...start]; // start配列をコピー
-                  newStart[num] = e.target.value; // num番目の値を更新
-                  setStart(newStart); // 更新した配列を設定
+                  const newDayPlans = [...dayPlans]; // dayPlans配列をコピー
+                  newDayPlans[aryNum].expectedData[num].start = e.target.value;
+                  setDayPlans(newDayPlans); // 更新した配列を設定
                 }}
               />
               ～
@@ -213,9 +188,9 @@ function Hide(props: { aryNum: number }) {
                 placeholder="終了"
                 style={timeStyle}
                 onChange={(e) => {
-                  const newEnd = [...end]; // start配列をコピー
-                  newEnd[num] = e.target.value; // num番目の値を更新
-                  setEnd(newEnd); // 更新した配列を設定
+                  const newDayPlans = [...dayPlans]; // dayPlans配列をコピー
+                  newDayPlans[aryNum].expectedData[num].end = e.target.value;
+                  setDayPlans(newDayPlans); // 更新した配列を設定
                 }}
               />
             </div>
@@ -226,15 +201,16 @@ function Hide(props: { aryNum: number }) {
               placeholder="場所"
               style={locStyle}
               onChange={(e) => {
-                const newLoc = [...loc]; // start配列をコピー
-                newLoc[num] = e.target.value; // num番目の値を更新
-                setLoc(newLoc); // 更新した配列を設定
+                const newDayPlans = [...dayPlans]; // dayPlans配列をコピー
+                newDayPlans[aryNum].expectedData[num].loc = e.target.value;
+                setDayPlans(newDayPlans); // 更新した配列を設定
               }}
             />
             <div onClick={() => handleShowDropdown(num)}>
               {showDropdown[num] ? "∧" : "∨"}
             </div>
           </div>
+          {showDropdown[num] && <PlanDes aryNum={aryNum} subNum={num} />}
         </div>
       ))}
       <div onClick={() => handlePlus()}>
