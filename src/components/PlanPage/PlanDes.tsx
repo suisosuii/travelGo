@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { DayPlanContext } from "./Day";
+import { DayPlanContext } from "./day";
 
 function PlanDes(props: { aryNum: number; subNum: number }) {
   const { aryNum, subNum } = props;

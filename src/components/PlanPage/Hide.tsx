@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { DayPlanContext } from "./Day";
+import { DayPlanContext } from "./day";
 
 import PlanDes from "./PlanDes";
 import plus from "../../img/plan/ExPlus.png";

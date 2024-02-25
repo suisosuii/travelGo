@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { DayPlanContext } from "./Day";
+import { DayPlanContext } from "./day";
 import { useNavigate } from "react-router-dom";
 
 import {

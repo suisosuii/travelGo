@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { DayPlanContext } from "./Day";
+import { DayPlanContext } from "./day";
 
 import Hide from "./Hide";
 
