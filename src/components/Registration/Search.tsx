@@ -89,6 +89,7 @@ function Search({ planData }: SearchProps) {
       serchUser && setUsersPro([...usersPro, serchUser]);
     }
     setShowDropdown(!showDropdown);
+    setSerchId("");
   };
 
   //エンターキー検出
@@ -152,6 +153,7 @@ function Search({ planData }: SearchProps) {
         <input
           name="search"
           type="text"
+          value={serchId}
           placeholder="uidを入力"
           style={{
             display: "flex",
