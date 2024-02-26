@@ -3,10 +3,18 @@ import React, { useEffect, useState, useRef } from "react";
 import { useAuthContext } from "../../auth/authProvider";
 import { db } from "../../firebase";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 
 import SerchIcon from "../../img/Registration/検索アイコン.png";
 import Scroll from "./ScrollBox";
 import Dicide from "./Decide";
+import acount from "../../img/header/acount-def.png";
 
 type UserPro = {
   name: string;
@@ -26,8 +34,8 @@ type SearchProps = {
 };
 
 function Search({ planData }: SearchProps) {
-  //ref
-  const ref = useRef<HTMLInputElement>(null);
+  //uRef
+  const uRef = useRef<HTMLInputElement>(null);
 
   //認証情報
   const { user } = useAuthContext();
@@ -42,12 +50,14 @@ function Search({ planData }: SearchProps) {
   const [usersPro, setUsersPro] = useState<UserPro[]>([]);
   const [planId, setPlanId] = useState<string | null>();
 
+  const [proImg, setProImg] = useState(acount);
+  const storage = getStorage();
   //要素位置情報取得
   useEffect(() => {
-    if (ref.current) {
-      console.log(ref.current.clientTop);
-      const clientTop = ref?.current.getBoundingClientRect().top;
-      const clientLeft = ref?.current.getBoundingClientRect().left;
+    if (uRef.current) {
+      console.log(uRef.current.clientTop);
+      const clientTop = uRef?.current.getBoundingClientRect().top;
+      const clientLeft = uRef?.current.getBoundingClientRect().left;
       planData && setUsersPro(planData.users);
       planData && setPlanId(planData.id);
       planData && setText(planData.title);
@@ -61,7 +71,9 @@ function Search({ planData }: SearchProps) {
     if (user) {
       const userRef = doc(db, "users", serchId);
       const docSnap = await getDoc(userRef);
+      const profilePicRef = ref(storage, "profile/" + serchId);
 
+      //名前取得
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
         setSerchUser(docSnap.data() as UserPro);
@@ -70,6 +82,17 @@ function Search({ planData }: SearchProps) {
         setSerchUser(null);
         console.log("No such document!");
       }
+
+      //画像取得
+      getDownloadURL(profilePicRef)
+        .then((url) => {
+          // ダウンロードURLが取得できたら、それをステートに格納
+          setProImg(url);
+        })
+        .catch((error) => {
+          console.error("Error getting download URL:", error);
+          setProImg(acount);
+        });
     }
   };
 
@@ -165,7 +188,7 @@ function Search({ planData }: SearchProps) {
           }}
           onKeyDown={(e) => onKeydown(e.key)}
           onChange={(e) => setSerchId(e.target.value)}
-          ref={ref}
+          ref={uRef}
         />
         <img
           src={SerchIcon}
@@ -206,7 +229,25 @@ function Search({ planData }: SearchProps) {
                 alignItems: "center", // 追加
               }}
             >
-              <div>{serchUser.name}</div>
+              <div
+                style={{
+                  display: "flex", // 追加
+                  alignItems: "center", // 追加
+                  fontSize: "1.3rem",
+                }}
+              >
+                <img
+                  src={proImg}
+                  alt="プロフィール画像"
+                  style={{
+                    width: "14vw",
+                    height: "14vw",
+                    borderRadius: "50%",
+                    marginRight: "3vw",
+                  }}
+                />
+                {serchUser.name}
+              </div>
               <div
                 style={{
                   background: "green",
