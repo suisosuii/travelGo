@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../../auth/authProvider";
 
 import Search from "./Search";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   DocumentSnapshot,
   collection,
@@ -28,6 +28,14 @@ function Registration() {
   const selectPlanId = location.state || { id: null };
 
   const [planData, setPlanData] = useState<PlanInfo | null>();
+
+  const navigator = useNavigate();
+  //サインインリダイレクト
+  useEffect(() => {
+    if (!user) {
+      navigator("/SignIn", { state: "SignIn" });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (selectPlanId.id) {
