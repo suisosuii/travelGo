@@ -1,8 +1,9 @@
 import React, { useEffect, useState, createContext } from "react";
 import Hour from "./HourPlan";
 
+import { useAuthContext } from "../../auth/authProvider";
 import Updata from "./Updata";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import plus from "../../img/plan/plus.png";
@@ -29,6 +30,15 @@ export const DayPlanContext = createContext<
 function Day() {
   const location = useLocation();
   const locState = location.state;
+
+  const { user } = useAuthContext();
+  const navigator = useNavigate();
+  //サインインリダイレクト
+  useEffect(() => {
+    if (!user) {
+      navigator("/SignIn", { state: "SignIn" });
+    }
+  }, [user]);
 
   //dayの配列State
   const [dayPlans, setDayPlans] = useState<dayPlan[]>([]);

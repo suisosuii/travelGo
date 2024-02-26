@@ -40,7 +40,6 @@ function Home() {
       <div className="message">
         {user ? `ようこそ${username}` : "ログインしてください"}
       </div>
-      <div className="plan">{isWide ? "PC" : "スマホ"}</div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         {user && <Plans planList={myPlans} />}
         <div className="newPlan" style={{ display: "flex" }}>
@@ -56,7 +55,7 @@ function Home() {
               border: "solid 1px #000000",
             }}
           ></img>
-          <Link to="/Reg" state={{ selId: null }}>
+          <Link to={"/Reg"} state={{ selId: null }}>
             <div
               className="descrioption"
               style={{
