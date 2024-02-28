@@ -135,7 +135,14 @@ function Search({ planData }: SearchProps) {
 
   return (
     <div>
-      <form style={{ display: "flex", justifyContent: "center" }}>
+      <form
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -147,6 +154,8 @@ function Search({ planData }: SearchProps) {
             name="title"
             type="text"
             value={text}
+            maxLength={15}
+            required
             placeholder="タイトルを入力"
             style={{
               marginTop: "3vh",
@@ -165,126 +174,130 @@ function Search({ planData }: SearchProps) {
             }
           />
         </div>
-      </form>
-      <div
-        className="search"
-        style={{ fontSize: "1.5rem", display: "flex", flexDirection: "column" }}
-      >
-        同行者
-      </div>
-      <div style={{ marginTop: "1vh", display: "flex" }}>
-        <input
-          name="search"
-          type="text"
-          value={serchId}
-          placeholder="uidを入力"
-          style={{
-            display: "flex",
-            width: "55vw",
-            height: "10vw",
-            fontSize: "1.5rem",
-            border: "solid 2px",
-            boxSizing: "border-box",
-          }}
-          onKeyDown={(e) => onKeydown(e.key)}
-          onChange={(e) => setSerchId(e.target.value)}
-          ref={uRef}
-        />
-        <img
-          src={SerchIcon}
-          alt="search"
-          style={{
-            height: "10vw",
-            width: "10vw",
-            border: "solid 2px",
-            boxSizing: "border-box",
-          }}
-          onClick={search}
-        ></img>
-      </div>
-      {showDropdown && hideTop && hideLeft && (
         <div
+          className="search"
           style={{
-            position: "absolute",
-            backgroundColor: "#f9f9f9", // 背景色を設定
-            top: `calc(${(hideTop / window.innerWidth) * 100}vw + 10vw)`,
-            left: `calc(${(hideLeft / window.innerWidth) * 100}vw - 5vw)`,
-            height: "15vw",
-            width: "75vw",
-            border: "solid 2px",
-            boxSizing: "border-box",
-            fontSize: "1.0rem",
-            display: "flex", // 追加
-            alignItems: "center", // 追加
-            borderRadius: "8px", // 角丸を設定
-            padding: "10px", // 内側の余白を設定
-            paddingLeft: "5vw",
-            justifyContent: "space-between", // 追加
+            fontSize: "1.5rem",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          {serchUser ? (
-            <div
-              style={{
-                display: "flex", // 追加
-                alignItems: "center", // 追加
-              }}
-            >
+          同行者
+        </div>
+        <div style={{ marginTop: "1vh", display: "flex" }}>
+          <input
+            name="search"
+            type="text"
+            value={serchId}
+            placeholder="uidを入力"
+            style={{
+              display: "flex",
+              width: "55vw",
+              height: "10vw",
+              fontSize: "1.5rem",
+              border: "solid 2px",
+              boxSizing: "border-box",
+            }}
+            onKeyDown={(e) => onKeydown(e.key)}
+            onChange={(e) => setSerchId(e.target.value)}
+            ref={uRef}
+          />
+          <img
+            src={SerchIcon}
+            alt="search"
+            style={{
+              height: "10vw",
+              width: "10vw",
+              border: "solid 2px",
+              boxSizing: "border-box",
+            }}
+            onClick={search}
+          ></img>
+        </div>
+        {showDropdown && hideTop && hideLeft && (
+          <div
+            style={{
+              position: "absolute",
+              backgroundColor: "#f9f9f9", // 背景色を設定
+              top: `calc(${(hideTop / window.innerWidth) * 100}vw + 10vw)`,
+              left: `calc(${(hideLeft / window.innerWidth) * 100}vw - 5vw)`,
+              height: "15vw",
+              width: "75vw",
+              border: "solid 2px",
+              boxSizing: "border-box",
+              fontSize: "1.0rem",
+              display: "flex", // 追加
+              alignItems: "center", // 追加
+              borderRadius: "8px", // 角丸を設定
+              padding: "10px", // 内側の余白を設定
+              paddingLeft: "5vw",
+              justifyContent: "space-between", // 追加
+            }}
+          >
+            {serchUser ? (
               <div
                 style={{
                   display: "flex", // 追加
                   alignItems: "center", // 追加
-                  fontSize: "1.3rem",
                 }}
               >
-                <img
-                  src={proImg}
-                  alt="プロフィール画像"
+                <div
                   style={{
-                    width: "14vw",
-                    height: "14vw",
-                    borderRadius: "50%",
-                    marginRight: "3vw",
+                    display: "flex", // 追加
+                    alignItems: "center", // 追加
+                    fontSize: "1.3rem",
                   }}
-                />
-                {serchUser.name}
+                >
+                  <img
+                    src={proImg}
+                    alt="プロフィール画像"
+                    style={{
+                      width: "14vw",
+                      height: "14vw",
+                      borderRadius: "50%",
+                      marginRight: "3vw",
+                    }}
+                  />
+                  {serchUser.name}
+                </div>
+                <div
+                  style={{
+                    background: "green",
+                    borderRadius: "8px",
+                    height: "12vw",
+                    width: "18vw",
+                    color: "white",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginLeft: "10px", // 名前とボックスの間にスペースを追加
+                  }}
+                  onClick={handleAdd}
+                >
+                  追加
+                </div>
               </div>
-              <div
-                style={{
-                  background: "green",
-                  borderRadius: "8px",
-                  height: "12vw",
-                  width: "18vw",
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginLeft: "10px", // 名前とボックスの間にスペースを追加
-                }}
-                onClick={handleAdd}
-              >
-                追加
-              </div>
-            </div>
-          ) : (
-            "uidが見つかりません"
-          )}
+            ) : (
+              "uidが見つかりません"
+            )}
 
-          <div
-            onClick={() => setShowDropdown(!showDropdown)}
-            style={{ color: "red", fontSize: "1.3rem" }}
-          >
-            ✖
+            <div
+              onClick={() => setShowDropdown(!showDropdown)}
+              style={{ color: "red", fontSize: "1.3rem" }}
+            >
+              ✖
+            </div>
           </div>
-        </div>
-      )}
-      <Scroll usersInfo={usersPro} childFunc={childDel} />
-      <Dicide
-        usersInfo={usersPro}
-        titleText={text}
-        planId={{ pid: planId ? planId : null }}
-        oldUsers={planData ? planData.users : null}
-        days={planData ? planData.day : 0}
-      />
+        )}
+        <Scroll usersInfo={usersPro} childFunc={childDel} />
+        <Dicide
+          usersInfo={usersPro}
+          titleText={text}
+          planId={{ pid: planId ? planId : null }}
+          oldUsers={planData ? planData.users : null}
+          days={planData ? planData.day : 0}
+        />
+      </form>
     </div>
   );
 }
