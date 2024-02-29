@@ -147,6 +147,8 @@ function Search({ planData }: SearchProps) {
             name="title"
             type="text"
             value={text}
+            maxLength={10}
+            required
             placeholder="タイトルを入力"
             style={{
               marginTop: "3vh",
