@@ -1,14 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { DayPlanContext } from "./day";
+import { useNavigate } from "react-router-dom";
+import Album from "./Album";
 
 function PlanDes(props: { aryNum: number; subNum: number }) {
   const { aryNum, subNum } = props;
   const context = useContext(DayPlanContext);
+  const navigator = useNavigate();
   if (!context) {
     // Contextがundefinedの場合の処理をここに書く
     throw new Error("DayPlanContext is not provided");
   }
   const [dayPlans, setDayPlans] = context;
+  const [albumVis, setAlbumVis] = useState<boolean>(false);
+
+  const handleAlbum = () => {
+    setAlbumVis(!albumVis);
+  };
 
   const budStyle: React.CSSProperties = {
     display: "flex",
@@ -123,10 +131,12 @@ function PlanDes(props: { aryNum: number; subNum: number }) {
             alignItems: "center",
             borderBottom: "solid 3px black",
           }}
+          onClick={handleAlbum}
         >
           <div>アルバム</div>
         </div>
       </div>
+      {albumVis && <Album aryNum={aryNum} subNum={subNum} />}
     </div>
   );
 }
