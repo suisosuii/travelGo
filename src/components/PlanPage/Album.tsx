@@ -114,7 +114,7 @@ function Album(props: { aryNum: number; subNum: number }) {
           src={url}
           alt=""
           key={index}
-          style={{ width: "25vw", height: "25vw" }}
+          style={{ width: "25vw", height: "25vw", marginTop: "1vw" }}
         />
       ))}
       <img
