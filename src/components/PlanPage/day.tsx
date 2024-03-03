@@ -115,6 +115,18 @@ function Day() {
     marginTop: "3vh",
   };
 
+  let totalBudget = dayPlans.reduce((total, dayPlan) => {
+    let expectedDataBudget = dayPlan.expectedData.reduce(
+      (total, data) => total + data.budget,
+      0
+    );
+    let trafficBudget = dayPlan.traffic.reduce(
+      (total, traffic) => total + traffic.budged,
+      0
+    );
+    return total + expectedDataBudget + trafficBudget;
+  }, 0);
+
   return (
     // Context Providerを使用してdayPlans stateを提供します
     <DayPlanContext.Provider value={[dayPlans, setDayPlans]}>
@@ -148,6 +160,7 @@ function Day() {
           ></img>
         </div>
         <Updata pid={locState.pid} />
+        <div style={{ fontSize: "1.3rem" }}>{"合計金額：" + totalBudget}</div>
       </div>
     </DayPlanContext.Provider>
   );
